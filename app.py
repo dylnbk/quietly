@@ -100,17 +100,17 @@ local_css("style.css")
 st.title('Whisper it.')
 
 # define tabs
-tab1, tab2 = st.tabs(["Hide", "Reveal"])
+tab1, tab2, tab3 = st.tabs(["Message", "Password", "Reveal"])
 
 # start script
 if __name__ == "__main__":
 
     try:
 
-        # hide a secret
+        # hide a secret message
         with tab1:
 
-            with st.form("input_hide", clear_on_submit=True):   
+            with st.form("input_message", clear_on_submit=True):   
 
                 # text area for user input limited to 1.5k chars
                 user_input = st.text_area('Enter a message:', max_chars=1500)
@@ -132,10 +132,38 @@ if __name__ == "__main__":
                 if confirm_hide:
 
                     key = insert_pass(user_input, expire)
-                    st.write(db.get(key)["key"])
+                    st.write('Private key:')
+                    st.subheader(db.get(key)["key"])
 
-        # reveal a secret
+        # generate and hide a password 
         with tab2:
+
+            with st.form("input_password", clear_on_submit=True):   
+
+                # create a column layout
+                col1, col2 = st.columns([3, 1])
+
+                # offer a slider selection
+                with col1:
+                    expire_password = st.slider("Expires:", 1, 7, 7) * 86400
+                
+                # submit button
+                with col2:
+                    # submit button with onclick that sends the message to be entered to the database
+                    confirm_password = st.form_submit_button("Submit")
+
+                info_box()
+
+                if confirm_password:
+                    secret = file_name()
+                    final_secret = insert_pass(secret, expire_password)
+                    st.write("Password:")
+                    st.subheader(secret)
+                    st.write("Private key:")
+                    st.subheader(db.get(final_secret)["key"])
+        
+        # reveal a secret
+        with tab3:
 
             with st.form("input_reveal", clear_on_submit=True):   
 
@@ -149,7 +177,9 @@ if __name__ == "__main__":
 
                 if confirm_reveal:
 
-                    st.write(get_secret(user_input))
+                    st.write("Secret:")
+                    st.subheader(get_secret(user_input))
+                    viewed(user_input)
 
     # pain
     except Exception as e:
