@@ -1,0 +1,45 @@
+
+div.block-container {
+    padding-top: 50px;
+}
+
+footer {
+	visibility: hidden;
+}
+
+.streamlit-expander {
+    border: none;
+    border-radius: 0px;
+    border-bottom: solid 2px #7c7c7c31;
+}
+
+.css-1p05t8e.epcbefy1 {
+    border: 0px;
+    padding: 0px;
+}
+
+.css-12ttj6m.epcbefy1 {
+    border: 0px;
+    padding: 0px;
+}
+
+.row-widget.css-k008qs.epcbefy2 {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.css-1ehzy7p.edgvbvh5 {
+    width: 150px;
+}
+
+.css-1x8cf1d.edgvbvh5 {
+    width: 150px;
+}
+
+.css-5uatcg.edgvbvh5 {
+    width: 150px;
+}
+
+.stSlider {
+    padding: 5px;
+}
