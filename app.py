@@ -209,4 +209,4 @@ if __name__ == "__main__":
 
     # pain
     except Exception as e:
-                st.error("Sorry, this is not available...", icon="💔")
+                st.error("Sorry this is not available...", icon="💔")
