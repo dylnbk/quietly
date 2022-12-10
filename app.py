@@ -1,5 +1,7 @@
 import streamlit as st
 import uuid
+import secrets
+import string
 from deta import Deta
 
 # load & inject style sheet
@@ -24,43 +26,56 @@ def info_box():
             
             To show support, you can ☕ [buy me a coffee](https://www.buymeacoffee.com/dylnbk).
 
-            **CAUTION** 
-            - All secrets will expire after 7 days.
+            **CAUTION**
+            - All secrets will be destroyed after they have been viewed.
             """)
 
         st.write("***")
 
         st.write("""
-            ##### Hide
-            - Send a secret - you will get a code to send to the recipient.
+            ##### Message
+            - Send a secret message that can be viewed using the private key.
             - Choose how many days until the secret expires.
             """)
         
         st.write("***")
 
         st.write("""
+            ##### Password
+            - Press submit to generate a password & private key.
+            - Choose how many days until the password expires.
+            """)
+        
+        st.write("***")
+
+        st.write("""
             ##### Reveal
-            - Show a secret - enter your code to reveal the secret message.
+            - Show the secret - enter the private key to reveal the message.
             - Once the message has been viewed it will self destruct.
             """)
 
         st.write("")
         st.write("")
 
-# generate random file names
-def file_name():
+# generate random strings
+def randomizer(is_password):
 
-    # use uuid to create random strings, use .hex to get alphanumeric only
-    result = str(uuid.uuid4().hex)
+    if is_password:
+
+        result = ''.join((secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(12)))
+
+    else:
+        # use uuid to create random strings, use .hex to get alphanumeric only
+        result = str(uuid.uuid4().hex)
 
     return result
 
 # create a new secret message database entry, return the secrets key
-def insert_pass(secret, expire):
+def insert_pass(secret, expire, is_password):
     
-    key = file_name()
+    key = randomizer(False)
 
-    db.put({"key": key, "secret": secret, "viewed": False}, expire_in=expire)
+    db.put({"key": key, "secret": secret, "viewed": False, "pass": is_password}, expire_in=expire)
 
     return key
 
@@ -73,6 +88,11 @@ def viewed(key):
 def get_secret(key):
 
     return db.get(key)["secret"]
+
+# return the secret for a specific key
+def check_pass(key):
+
+    return db.get(key)["pass"]
 
 # main VISUAL ELEMENTS BEGIN HERE <<----------------------------------------------------------------------------||
 
@@ -131,7 +151,7 @@ if __name__ == "__main__":
 
                 if confirm_hide:
 
-                    key = insert_pass(user_input, expire)
+                    key = insert_pass(user_input, expire, False)
                     st.write('Private key:')
                     st.subheader(db.get(key)["key"])
 
@@ -155,8 +175,8 @@ if __name__ == "__main__":
                 info_box()
 
                 if confirm_password:
-                    secret = file_name()
-                    final_secret = insert_pass(secret, expire_password)
+                    secret = randomizer(True)
+                    final_secret = insert_pass(secret, expire_password, True)
                     st.write("Password:")
                     st.subheader(secret)
                     st.write("Private key:")
@@ -176,9 +196,15 @@ if __name__ == "__main__":
                 info_box()
 
                 if confirm_reveal:
-
-                    st.write("Secret:")
-                    st.subheader(get_secret(user_input))
+                    
+                    result = get_secret(user_input)
+                    
+                    if check_pass(user_input):
+                        st.write("Password:")
+                        st.subheader(result)
+                    else:
+                        st.write("Secret message:")
+                        st.write(result)
                     viewed(user_input)
 
     # pain
