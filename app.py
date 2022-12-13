@@ -17,7 +17,7 @@ def info_box():
     # create an info box
     with st.expander("See info"):
 
-        st.write("### Thanks for visiting Hushy!")
+        st.write("### Thanks for visiting Quietly!")
 
         st.write("""
             This website was made using Python, you can view the source [here](https://github.com/dylnbk/hushy).
@@ -60,12 +60,12 @@ def info_box():
 # generate random strings
 def randomizer(is_password):
 
+    # for passwords use the secrets import to randomize a 12 character password
     if is_password:
-
         result = ''.join((secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(12)))
 
+    # use uuid to create random strings, use .hex to get alphanumeric only
     else:
-        # use uuid to create random strings, use .hex to get alphanumeric only
         result = str(uuid.uuid4().hex)
 
     return result
@@ -73,8 +73,10 @@ def randomizer(is_password):
 # create a new secret message database entry, return the secrets key
 def insert_pass(secret, expire, is_password):
     
+    # create a private key
     key = randomizer(False)
 
+    # store the secret in the Deta base
     db.put({"key": key, "secret": secret, "viewed": False, "pass": is_password}, expire_in=expire)
 
     return key
@@ -82,6 +84,7 @@ def insert_pass(secret, expire, is_password):
 # update database entry when it has been viewed to delete the secret
 def viewed(key):
 
+    # write over the secret and set it to expire in 10 seconds
     db.put({"key": key, "secret": "Aaaaand it's gone.", "viewed": True}, expire_in=10)
 
 # return the secret for a specific key
@@ -94,7 +97,116 @@ def check_pass(key):
 
     return db.get(key)["pass"]
 
-# main VISUAL ELEMENTS BEGIN HERE <<----------------------------------------------------------------------------||
+# create the message menu
+def message_menu():
+
+    # create a form
+    with st.form("input_message", clear_on_submit=True):   
+
+        # text area for user input
+        user_input = st.text_area('Enter a message:')
+
+        # create a column layout
+        col1, col2 = st.columns([3, 1])
+
+        # offer a slider selection
+        with col1:
+            expire = st.slider("Expires:", 1, 7, 7) * 86400
+        
+        # submit button
+        with col2:
+            confirm_hide = st.form_submit_button("Submit")
+
+        # info - here due to layout prefereces
+        info_box()
+
+        # if the user submits
+        if confirm_hide:
+            
+            # input the message to the Deta base & return the private key
+            key = insert_pass(user_input, expire, False)
+
+            # write the private key to the screen
+            st.write('Private key:')
+            st.subheader(key)
+
+# create the password menu
+def pass_menu():
+
+    # create a form
+    with st.form("input_password", clear_on_submit=True):   
+
+        # create a column layout
+        col1, col2 = st.columns([3, 1])
+
+        # offer a slider selection
+        with col1:
+            expire_password = st.slider("Expires:", 1, 7, 7) * 86400
+        
+        # submit button
+        with col2:
+            confirm_password = st.form_submit_button("Submit")
+
+        # info - here due to layout prefereces
+        info_box()
+
+        # if the user submits
+        if confirm_password:
+
+            # create a password
+            password = randomizer(True)
+
+            # store to Deta base and return the private key
+            secret = insert_pass(password, expire_password, True)
+
+            # write the password to the screen
+            st.write("Password:")
+            st.subheader(password)
+
+            # write the private key to the screen
+            st.write("Private key:")
+            st.subheader(secret)
+
+# create the menu for reveal tab
+def reveal_menu():
+
+    # create a form
+    with st.form("input_reveal", clear_on_submit=True):   
+
+        # text area for user to input their code
+        user_input = st.text_input('Enter a code:')
+
+        # submit button 
+        confirm_reveal = st.form_submit_button("Submit")
+
+        # info - here due to layout prefereces
+        info_box()
+
+        # if the user hasnt submitted
+        if not confirm_reveal:
+
+            # do nothing
+            return None
+            
+        # check the users input, call get_secret
+        result = get_secret(user_input)
+        
+        # check if it's a password
+        if check_pass(user_input):
+
+            # write the password in a large font style
+            st.write("Password:")
+            st.subheader(result)
+
+        # not a password    
+        else:
+
+            # write as a regular text format
+            st.write("Secret message:")
+            st.write(result)
+            
+        # flag that the content has been viewed, destroys the message
+        viewed(user_input)
 
 # burger menu config
 st.set_page_config(
@@ -129,83 +241,15 @@ if __name__ == "__main__":
 
         # hide a secret message
         with tab1:
-
-            with st.form("input_message", clear_on_submit=True):   
-
-                # text area for user input limited to 1.5k chars
-                user_input = st.text_area('Enter a message:', max_chars=1500)
-
-                # create a column layout
-                col1, col2 = st.columns([3, 1])
-
-                # offer a slider selection
-                with col1:
-                    expire = st.slider("Expires:", 1, 7, 7) * 86400
-                
-                # submit button
-                with col2:
-                    # submit button with onclick that sends the message to be entered to the database
-                    confirm_hide = st.form_submit_button("Submit")
-
-                info_box()
-
-                if confirm_hide:
-
-                    key = insert_pass(user_input, expire, False)
-                    st.write('Private key:')
-                    st.subheader(db.get(key)["key"])
+            message_menu()
 
         # generate and hide a password 
         with tab2:
-
-            with st.form("input_password", clear_on_submit=True):   
-
-                # create a column layout
-                col1, col2 = st.columns([3, 1])
-
-                # offer a slider selection
-                with col1:
-                    expire_password = st.slider("Expires:", 1, 7, 7) * 86400
-                
-                # submit button
-                with col2:
-                    # submit button with onclick that sends the message to be entered to the database
-                    confirm_password = st.form_submit_button("Submit")
-
-                info_box()
-
-                if confirm_password:
-                    secret = randomizer(True)
-                    final_secret = insert_pass(secret, expire_password, True)
-                    st.write("Password:")
-                    st.subheader(secret)
-                    st.write("Private key:")
-                    st.subheader(db.get(final_secret)["key"])
+            pass_menu()
         
         # reveal a secret
         with tab3:
-
-            with st.form("input_reveal", clear_on_submit=True):   
-
-                # text area for user to input their code
-                user_input = st.text_input('Enter a code:')
-
-                # submit button with onclick that grabs the corresponding database entry
-                confirm_reveal = st.form_submit_button("Submit")
-
-                info_box()
-
-                if confirm_reveal:
-                    
-                    result = get_secret(user_input)
-                    
-                    if check_pass(user_input):
-                        st.write("Password:")
-                        st.subheader(result)
-                    else:
-                        st.write("Secret message:")
-                        st.write(result)
-                    viewed(user_input)
+            reveal_menu()
 
     # pain
     except Exception as e:
