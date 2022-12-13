@@ -21,8 +21,8 @@ def info_box():
 
         st.write("""
             This website was made using Python, you can view the source [here](https://github.com/dylnbk/hushy).
-            
-            Send secrets that self destruct after being viewed & expire based on a timer.
+
+            Store secrets that self destruct after being viewed & expire based on a timer.
             
             To show support, you can ☕ [buy me a coffee](https://www.buymeacoffee.com/dylnbk).
 
@@ -34,7 +34,7 @@ def info_box():
 
         st.write("""
             ##### Message
-            - Send a secret message that can be viewed using the private key.
+            - Store a secret message that can be viewed using the private key.
             - Choose how many days until the secret expires.
             """)
         
