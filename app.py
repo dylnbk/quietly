@@ -28,7 +28,7 @@ def info_box():
 
             Share your private key, once the message has been viewed it self-destructs!
             
-            To show support, you can ☕ [buy me a coffee](https://www.buymeacoffee.com/dylnbk).
+            To show support, please consider ☕ [buying me a coffee](https://www.buymeacoffee.com/dylnbk).
 
             """)
 
