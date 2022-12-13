@@ -22,12 +22,14 @@ def info_box():
         st.write("""
             This website was made using Python, you can view the source [here](https://github.com/dylnbk/hushy).
 
-            Store secrets that self destruct after being viewed & expire based on a timer.
+            Store a message that can be revealed using the corresponding private key.
+
+            Generate a password which can also be revealed using the private key.
+
+            Share your private key, once the message has been viewed it self-destructs!
             
             To show support, you can ☕ [buy me a coffee](https://www.buymeacoffee.com/dylnbk).
 
-            **CAUTION**
-            - All secrets will be destroyed after they have been viewed.
             """)
 
         st.write("***")
