@@ -108,16 +108,11 @@ def message_menu():
         # text area for user input
         user_input = st.text_area('Enter a message:')
 
-        # create a column layout
-        col1, col2 = st.columns([3, 1])
-
         # offer a slider selection
-        with col1:
-            expire = st.slider("Expires:", 1, 7, 7) * 86400
+        expire = st.slider("Expires:", 1, 7, 7) * 86400
         
         # submit button
-        with col2:
-            confirm_hide = st.form_submit_button("Submit")
+        confirm_hide = st.form_submit_button("Submit")
 
         # info - here due to layout prefereces
         info_box()
@@ -138,16 +133,11 @@ def pass_menu():
     # create a form
     with st.form("input_password", clear_on_submit=True):   
 
-        # create a column layout
-        col1, col2 = st.columns([3, 1])
-
         # offer a slider selection
-        with col1:
-            expire_password = st.slider("Expires:", 1, 7, 7) * 86400
+        expire_password = st.slider("Expires:", 1, 7, 7) * 86400
         
         # submit button
-        with col2:
-            confirm_password = st.form_submit_button("Submit")
+        confirm_password = st.form_submit_button("Submit")
 
         # info - here due to layout prefereces
         info_box()
