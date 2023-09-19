@@ -83,7 +83,7 @@ def randomizer(is_password):
 # create a new secret message database entry, return the secrets key
 def insert_pass(secret, expire, nonce, tag, is_password):
     
-    # create a private key
+    # create a public key
     key = randomizer(False)
 
     # store the secret in the Deta base
@@ -170,7 +170,7 @@ def message_menu():
         # if the user submits
         if confirm_hide:
             
-            # input the message to the Deta base & return the private key
+            # input the message to the Deta base & return the public key
             key = insert_pass(message, expire, nonce, tag, False)
 
             # write the public key to the screen
@@ -209,14 +209,14 @@ def pass_menu():
 
             nonce, tag, message = encrypt(password, passphrase)
 
-            # store to Deta base and return the private key
+            # store to Deta base and return the public key
             secret = insert_pass(message, expire_password, nonce, tag, True)
 
             # write the password to the screen
             st.write("Password:")
             st.subheader(password)
 
-            # write the private key to the screen
+            # write the public key to the screen
             st.write("")
             st.write("Public key:")
             st.subheader(secret)
