@@ -1,2 +1,4 @@
 streamlit
 deta
+Cryptodome
+hashlib
