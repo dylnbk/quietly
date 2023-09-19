@@ -1,3 +1,3 @@
 streamlit
 deta
-pycryptodome
+pycryptodomex
