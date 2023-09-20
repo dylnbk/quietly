@@ -3,3 +3,6 @@ base="dark"
 primaryColor="#4bffc3"
 backgroundColor="#232323"
 secondaryBackgroundColor="#414141"
+
+[client]
+toolbarMode = "minimal"
