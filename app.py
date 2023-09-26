@@ -281,8 +281,7 @@ st.set_page_config(
     page_icon="👀",
     menu_items={
         'Report a bug': "mailto:dyln.bk@gmail.com",
-        'Get help': None,
-        'About': "Made by dyln.bk"
+        'Get help': None
     }
 )
 
