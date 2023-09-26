@@ -25,6 +25,8 @@ def info_box():
 
         st.write("""
             This website was made using Python, you can view the source [here](https://github.com/dylnbk/hushy).
+                 
+            Check out my personal website [dylnbk.page](https://dylnbk.page).
 
             Store a message that can be revealed using the corresponding public key.
 
