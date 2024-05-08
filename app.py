@@ -74,11 +74,11 @@ def randomizer(is_password):
 
     # for passwords use the secrets import to randomize a 12 character password
     if is_password:
-        result = ''.join((secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(12)))
+        result = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(16)))
 
     # use uuid to create random strings, use .hex to get alphanumeric only
     else:
-        result = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(18)))
+        result = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(22)))
 
     return result
 
