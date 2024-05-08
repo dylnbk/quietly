@@ -7,12 +7,9 @@ footer {
 	visibility: hidden;
 }
 
-h3 {
-    overflow-wrap: break-word;
-}
-
-span {
-    overflow-wrap: break-word;
+.st-emotion-cache-1xw8zd0.e10yg2by1 {
+    border: none;
+    padding: 0;
 }
 
 .streamlit-expander {

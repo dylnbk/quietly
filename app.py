@@ -78,7 +78,7 @@ def randomizer(is_password):
 
     # use uuid to create random strings, use .hex to get alphanumeric only
     else:
-        result = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(12)))
+        result = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(22)))
 
     return result
 
