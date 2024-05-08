@@ -7,6 +7,14 @@ footer {
 	visibility: hidden;
 }
 
+h3 {
+    overflow-wrap: break-word;
+}
+
+span {
+    overflow-wrap: break-word;
+}
+
 .streamlit-expander {
     border: none;
     border-radius: 0px;
